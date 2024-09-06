@@ -1,9 +1,8 @@
+// Import components
 import { useEffect, useState, useRef, CSSProperties } from 'react';
 import axios from 'axios';
-import { Line, Bar, Pie } from 'react-chartjs-2'; // Keep these imports for existing charts
-import { createChart, IChartApi } from 'lightweight-charts'; // Import Lightweight Charts
-
-// Import necessary components from Chart.js
+import { Line, Bar, Pie } from 'react-chartjs-2';
+import { createChart, IChartApi } from 'lightweight-charts';
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -29,9 +28,10 @@ ChartJS.register(
   ArcElement,
   LineElement,
   Filler,
-  PointElement // Ensure PointElement is included
+  PointElement
 );
 
+// Establish Dashboard
 const Dashboard = () => {
   const [lineChartData, setLineChartData] = useState({
     labels: [],
@@ -166,14 +166,14 @@ const Dashboard = () => {
     alignItems: 'center',
     justifyContent: 'center',
     textAlign: 'center',
-    padding: '20px', // Added padding for overall container spacing
+    padding: '20px',
   };
 
   const chartContainerStyle: CSSProperties = {
-    width: '80%', // Adjust width as needed
-    maxWidth: '800px', // Ensure charts are not too large
-    height: '400px', // Adjust height as needed
-    marginBottom: '40px', // Increased margin-bottom for more space between charts and titles
+    width: '80%',
+    maxWidth: '800px',
+    height: '400px',
+    marginBottom: '40px',
   };
 
   return (
