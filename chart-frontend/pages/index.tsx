@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef } from 'react';
+import { useEffect, useState, useRef, CSSProperties } from 'react';
 import axios from 'axios';
 import { Line, Bar, Pie } from 'react-chartjs-2'; // Keep these imports for existing charts
 import { createChart, IChartApi } from 'lightweight-charts'; // Import Lightweight Charts
@@ -157,32 +157,51 @@ const Dashboard = () => {
     return () => chart.remove();
   }, [candlestickData]);
 
+  // Define styles with CSSProperties
+  const containerStyle: CSSProperties = {
+    background: 'linear-gradient(to right, #ffffff, #f0f0f0)',
+    minHeight: '100vh',
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+    justifyContent: 'center',
+    textAlign: 'center',
+    padding: '20px', // Added padding for overall container spacing
+  };
+
+  const chartContainerStyle: CSSProperties = {
+    width: '80%', // Adjust width as needed
+    maxWidth: '800px', // Ensure charts are not too large
+    height: '400px', // Adjust height as needed
+    marginBottom: '40px', // Increased margin-bottom for more space between charts and titles
+  };
+
   return (
-    <div>
+    <div style={containerStyle}>
       <h1>Dashboard</h1>
 
       {/* Line Chart */}
-      <div>
-        <h2>Line Chart</h2>
+      <div style={chartContainerStyle}>
+        <h2 style={{ marginBottom: '20px' }}>Line Chart</h2> {/* Added margin-bottom */}
         <Line data={lineChartData} />
       </div>
 
       {/* Bar Chart */}
-      <div>
-        <h2>Bar Chart</h2>
+      <div style={chartContainerStyle}>
+        <h2 style={{ marginBottom: '20px' }}>Bar Chart</h2> {/* Added margin-bottom */}
         <Bar data={barChartData} />
       </div>
 
       {/* Pie Chart */}
-      <div>
-        <h2>Pie Chart</h2>
+      <div style={chartContainerStyle}>
+        <h2 style={{ marginBottom: '20px' }}>Pie Chart</h2> {/* Added margin-bottom */}
         <Pie data={pieChartData} />
       </div>
 
       {/* Candlestick Chart */}
-      <div>
-        <h2>Candlestick Chart</h2>
-        <div ref={chartContainerRef} style={{ position: 'relative', width: '100%', height: '400px' }} />
+      <div style={chartContainerStyle}>
+        <h2 style={{ marginBottom: '20px' }}>Candlestick Chart</h2> {/* Added margin-bottom */}
+        <div ref={chartContainerRef} style={{ width: '100%', height: '100%' }} />
       </div>
     </div>
   );
