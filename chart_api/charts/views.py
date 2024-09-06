@@ -1,15 +1,15 @@
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
 
-# @api_view(['GET'])
-# def candlestick_data(request):
-#     data = {
-#         "data": [
-#             {"x": "2023-01-01", "open": 30, "high": 40, "low": 25, "close": 35},
-#             {"x": "2023-01-02", "open": 35, "high": 45, "low": 30, "close": 40},
-#         ]
-#     }
-#     return Response(data)
+@api_view(['GET'])
+def candlestick_data(request):
+    data = {
+        "data": [
+            {"time": "2023-01-01", "open": 30, "high": 40, "low": 25, "close": 35},
+            {"time": "2023-01-02", "open": 35, "high": 45, "low": 30, "close": 40},
+        ]
+    }
+    return Response(data)
 
 @api_view(['GET'])
 def line_chart_data(request):

@@ -1,30 +1,35 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import axios from 'axios';
+import { Line, Bar, Pie } from 'react-chartjs-2'; // Keep these imports for existing charts
+import { createChart, IChartApi } from 'lightweight-charts'; // Import Lightweight Charts
+
+// Import necessary components from Chart.js
 import {
   Chart as ChartJS,
   CategoryScale,
   LinearScale,
-  PointElement,
-  LineElement,
   BarElement,
-  ArcElement,
   Title,
   Tooltip,
-  Legend
+  Legend,
+  ArcElement,
+  LineElement,
+  Filler,
+  PointElement,
 } from 'chart.js';
 
-import { Line, Bar, Pie, Doughnut } from 'react-chartjs-2';
-
+// Register components
 ChartJS.register(
-  CategoryScale,  // Register category scale for Bar and Line charts
-  LinearScale,    // Register linear scale for Line and Bar charts
-  PointElement,   // For point elements on the Line chart
-  LineElement,    // Line element for Line chart
-  BarElement,     // Bar element for Bar chart
-  ArcElement,     // Arc element for Pie or Doughnut chart
+  CategoryScale,
+  LinearScale,
+  BarElement,
   Title,
   Tooltip,
-  Legend
+  Legend,
+  ArcElement,
+  LineElement,
+  Filler,
+  PointElement // Ensure PointElement is included
 );
 
 const Dashboard = () => {
@@ -64,6 +69,10 @@ const Dashboard = () => {
       },
     ],
   });
+
+  const [candlestickData, setCandlestickData] = useState([]);
+
+  const chartContainerRef = useRef<HTMLDivElement>(null);
 
   // Fetch data from API
   useEffect(() => {
@@ -109,7 +118,44 @@ const Dashboard = () => {
         ],
       });
     });
+
+    axios.get('http://localhost:8000/api/candlestick-chart-data/').then((response) => {
+      setCandlestickData(response.data.data); // Ensure this is the correct format
+    });
   }, []);
+
+  useEffect(() => {
+    if (!chartContainerRef.current || !candlestickData.length) return;
+
+    const chart = createChart(chartContainerRef.current, {
+      width: chartContainerRef.current.clientWidth,
+      height: chartContainerRef.current.clientHeight,
+      layout: {
+        background: {
+          color: '#ffffff',
+        },
+        textColor: '#000000',
+      },
+      grid: {
+        vertLines: {
+          color: '#eeeeee',
+        },
+        horzLines: {
+          color: '#eeeeee',
+        },
+      },
+    });
+
+    chart.addCandlestickSeries({
+      upColor: 'rgb(0,204,255)',
+      borderUpColor: 'rgb(0,204,255)',
+      wickUpColor: 'rgb(0,204,255)',
+      borderDownColor: 'rgb(255,83,85)',
+      wickDownColor: 'rgb(255,83,85)',
+    }).setData(candlestickData);
+
+    return () => chart.remove();
+  }, [candlestickData]);
 
   return (
     <div>
@@ -131,6 +177,12 @@ const Dashboard = () => {
       <div>
         <h2>Pie Chart</h2>
         <Pie data={pieChartData} />
+      </div>
+
+      {/* Candlestick Chart */}
+      <div>
+        <h2>Candlestick Chart</h2>
+        <div ref={chartContainerRef} style={{ position: 'relative', width: '100%', height: '400px' }} />
       </div>
     </div>
   );
